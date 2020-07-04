@@ -1,28 +1,46 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Nav></Nav>
+    <div class="app">
+      <transition name="app" mode="out-in">
+        <router-view ></router-view>
+      </transition>
+    </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Nav from '@/components/loyaut/Nav';
+import Footer from '@/components/loyaut/Footer';
+import { mapActions } from 'vuex';
+import * as firebase from "firebase";
 
 export default {
-  name: 'App',
+  name: 'app',
+  created() {
+    const firebaseConfig = {
+      apiKey: "AIzaSyD8JjQolTpTUkFYNbrKY_tpdKjeq4EOyaY",
+      authDomain: "test-1b306.firebaseapp.com",
+      databaseURL: "https://test-1b306.firebaseio.com",
+      projectId: "test-1b306",
+      storageBucket: "test-1b306.appspot.com",
+      messagingSenderId: "881838812021",
+    };
+    firebase.initializeApp(firebaseConfig);
+    this.getUser()
+  },
+  methods: {
+    ...mapActions({
+      'getUser': 'user/getUser',
+    })
+  },
   components: {
-    HelloWorld
+    Nav,
+    Footer
   }
 }
 </script>
+<style lang="scss">
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
