@@ -1,25 +1,24 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes';
-
 Vue.use(VueRouter)
 
-export const router = new VueRouter({
+const router = new VueRouter({
   routes,
   mode: 'history'
 });
 
-Vue.router = router;
-
 router.beforeEach((to, from, next) => {
-  if((!localStorage.token && ['about'].find(( el ) => el === to.name)) ||
-    (localStorage.token && ['sign-in', 'sign-up'].find(( el ) => el === to.name))
-    ){
-    next({
-      path: '/',
-    })
+  if(to.matched.some(record => record.meta.auth)) {
+    if (localStorage.token) {
+      next()
+      return
+    }
+    next('/')
   } else {
-    next();
+    next() 
   }
 })
+Vue.router = router;
+
 export default router;
